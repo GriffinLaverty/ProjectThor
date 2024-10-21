@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { getAnswer } from "./langchain"
+// import { getAnswer } from "./langchain"
 
 export default function App() {
   const [question, setQuestion] = useState('');
