@@ -1,12 +1,14 @@
 ##This is the only file that writes to CSV in csv_output, the rest write to a file in output
 
+import json
+import uuid
 import os
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_community.embeddings import SentenceTransformerEmbeddings
 import pandas as pd
 ##from langchain_ollama import OllamaEmbeddings
    
-embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2") #Change model here
+embeddings = SentenceTransformerEmbeddings(model_name="intfloat/e5-large-v2") #Change model here
 
 def create_chunks(infile, metadata):
     with open(infile, 'r') as f:
@@ -20,7 +22,7 @@ def create_chunks(infile, metadata):
     data = []
     count = 0
     for doc in docs:
-        id = count + 1
+        id = uuid.uuid4()
         vectorDoc = embeddings.embed_query(doc.page_content)
         data.append([id, doc.page_content, metadata, vectorDoc])
         count += 1
@@ -33,12 +35,14 @@ def create_csv(data):
 
 inputfile = os.path.join('data', 'files', 'mlcc10.md')  #Change the file name here
 
-metadata = {
+data = {
     "name": "mlcc10.pdf", 
     "section": "Master and Local Control Center Procedures",
     "url": "https://www.iso-ne.com/static-assets/documents/rules_proceds/operating/mast_satllte/mlcc10.pdf",
     "content_type": "pdf",
 }
+
+metadata = json.dumps(data)
 
 data = create_chunks(inputfile, metadata)
 create_csv(data)
