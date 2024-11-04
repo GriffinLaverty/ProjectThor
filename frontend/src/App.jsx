@@ -14,7 +14,7 @@ export default function App() {
       // result = await getAnswer(question);
       result = input
       setAnswer(result);
-      setMessages([...messages, result])
+      setMessages([...messages, { text: question, isUser: true }, { text: result, isUser: false }])
     } catch (e) {
       console.error(e)
     }
@@ -30,18 +30,20 @@ export default function App() {
             <h1 className="text-2xl sm:text-4xl font-semibold text-center text-iso-yellow dark:text-iso-yellow flex gap-4 p-4 items-center justify-center">
               ThorGPT
             </h1>
-            <div className="h-4/5 overflow-auto px-10 lg:px-20">
-              <div className="h-full flex flex-col items-center text-sm dark:bg-iso-dark-gray max-w-2xl mx-auto">
+            <div className="h-4/5 overflow-auto">
+              <div className="h-full flex flex-col items-start text-sm dark:bg-iso-dark-gray">
                 {messages.map((message, i) => (
                   <div
-                    key={`${message}${i}`}
-                    className={`w-3/4 flex flex-col items-${
-                      i % 2 === 0 ? 'end' : 'start'
-                    } text-white border-2 ${
-                      i % 2 === 0 ? 'border-iso-yellow text-right' : 'border-iso-blue text-left'
+                    key={`${message.text}${i}`}
+                    className={`max-w-xl mx-auto flex flex-col items-${
+                      message.isUser ? 'end' : 'start'
+                    } text-sm ${
+                      message.isUser
+                        ? 'border-2 border-iso-yellow text-right dark:text-white font-bold bg-transparent'
+                        : 'border-2 border-iso-blue text-left dark:text-white font-bold bg-transparent'
                     } p-2 m-2 rounded-lg`}
                   >
-                    <p>{message}</p>
+                    <p>{message.text}</p>
                   </div>
                 ))}
               </div>
