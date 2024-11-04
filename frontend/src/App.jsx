@@ -14,7 +14,7 @@ export default function App() {
       // result = await getAnswer(question);
       result = input
       setAnswer(result);
-      setMessages([...messages, { text: question, isUser: true }, { text: result, isUser: false }])
+      setMessages([...messages, result])
     } catch (e) {
       console.error(e)
     }
@@ -34,14 +34,14 @@ export default function App() {
               <div className="h-full flex flex-col items-center text-sm dark:bg-iso-dark-gray max-w-2xl mx-auto">
                 {messages.map((message, i) => (
                   <div
-                    key={`${message.text}${i}`}
+                    key={`${message}${i}`}
                     className={`w-3/4 flex flex-col items-${
-                      message.isUser ? 'end' : 'start'
+                      i % 2 === 0 ? 'end' : 'start'
                     } text-white border-2 ${
-                      message.isUser ? 'border-iso-yellow' : 'border-iso-blue'
+                      i % 2 === 0 ? 'border-iso-yellow text-right' : 'border-iso-blue text-left'
                     } p-2 m-2 rounded-lg`}
                   >
-                    <p>{message.text}</p>
+                    <p>{message}</p>
                   </div>
                 ))}
               </div>
