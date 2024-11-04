@@ -14,7 +14,7 @@ export default function App() {
       // result = await getAnswer(question);
       result = input
       setAnswer(result);
-      setMessages([...messages, result])
+      setMessages([...messages, { text: question, isUser: true }, { text: result, isUser: false }])
     } catch (e) {
       console.error(e)
     }
@@ -30,19 +30,20 @@ export default function App() {
             <h1 className="text-2xl sm:text-4xl font-semibold text-center text-iso-yellow dark:text-iso-yellow flex gap-4 p-4 items-center justify-center">
               ThorGPT
             </h1>
-            <div className="h-4/5 overflow-auto">
-              <div className="h-full flex flex-col items-center text-sm dark:bg-iso-dark-gray">
-                {/* { render messages here } */}
-                {messages.map((message, i) => {
-                  return (
-                    <div
-                      key={`${message}${i}`}
-                      className="h-10 w-20 flex flex-col items-center text-sm bg-iso-yellow"
-                    >
-                      <p>{message}</p>
-                    </div>
-                  );
-                })}
+            <div className="h-4/5 overflow-auto px-10 lg:px-20">
+              <div className="h-full flex flex-col items-center text-sm dark:bg-iso-dark-gray max-w-2xl mx-auto">
+                {messages.map((message, i) => (
+                  <div
+                    key={`${message.text}${i}`}
+                    className={`w-3/4 flex flex-col items-${
+                      message.isUser ? 'end' : 'start'
+                    } text-white border-2 ${
+                      message.isUser ? 'border-iso-yellow' : 'border-iso-blue'
+                    } p-2 m-2 rounded-lg`}
+                  >
+                    <p>{message.text}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -52,7 +53,7 @@ export default function App() {
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSubmitQuestion(question);
-                this.reset();
+                setQuestion('');
               }}
               className="stretch mx-2 flex flex-row gap-3 last:mb-2 md:mx-4 md:last:mb-6 lg:mx-auto lg:max-w-2xl xl:max-w-3xl"
             >
